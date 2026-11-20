@@ -62,7 +62,22 @@ export class AgentService {
     private readonly rag: RagService,
     private readonly skills: SkillRegistry,
     private readonly tools: ToolsService,
-  ) {}
+  ) {
+    // LangSmith 由 @langchain/core 读取环境变量自动上报，这里只做启动提示
+    if (AgentService.tracingEnabled()) {
+      const project =
+        process.env.LANGSMITH_PROJECT ?? process.env.LANGCHAIN_PROJECT ?? 'default';
+      this.logger.log(`LangSmith 追踪已开启：project=${project}`);
+    }
+  }
+
+  private static tracingEnabled(): boolean {
+    const flag =
+      process.env.LANGSMITH_TRACING ??
+      process.env.LANGCHAIN_TRACING_V2 ??
+      process.env.LANGCHAIN_TRACING;
+    return flag === 'true' && Boolean(process.env.LANGSMITH_API_KEY ?? process.env.LANGCHAIN_API_KEY);
+  }
 
   private getGraph() {
     const tools = this.tools.all();
@@ -105,6 +120,9 @@ export class AgentService {
       { messages: [new HumanMessage(message)] },
       {
         version: 'v2',
+        runName: 'nova-agent',
+        tags: ['agent-demo', this.cfg.llm.model],
+        metadata: { threadId },
         configurable: { thread_id: threadId },
         recursionLimit: this.cfg.agent.recursionLimit,
       },
