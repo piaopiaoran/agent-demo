@@ -1,0 +1,48 @@
+{
+  "_comment": "共 5 个 MCP server：4 个本地 stdio（node 直接跑 node_modules 里的入口，不经 npx，启动快且离线可用）+ 1 个远程 http。enabled=false 可单独关闭。",
+  "mcpServers": {
+    "filesystem": {
+      "label": "文件系统",
+      "transport": "stdio",
+      "command": "node",
+      "args": [
+        "node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+        "/Users/wuyu/WorkBuddy/agent-demo/data"
+      ],
+      "enabled": true
+    },
+    "memory": {
+      "label": "知识图谱记忆",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["node_modules/@modelcontextprotocol/server-memory/dist/index.js"],
+      "enabled": true
+    },
+    "sequential-thinking": {
+      "label": "顺序思考",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"],
+      "enabled": true
+    },
+    "git": {
+      "label": "Git 仓库",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["node_modules/@cyanheads/git-mcp-server/dist/index.js"],
+      "env": {
+        "MCP_TRANSPORT_TYPE": "stdio",
+        "MCP_LOG_LEVEL": "error",
+        "GIT_BASE_DIR": "/Users/wuyu/WorkBuddy/agent-demo",
+        "GIT_SIGN_COMMITS": "false"
+      },
+      "enabled": true
+    },
+    "deepwiki": {
+      "label": "远程 · DeepWiki",
+      "transport": "http",
+      "url": "https://mcp.deepwiki.com/mcp",
+      "enabled": true
+    }
+  }
+}

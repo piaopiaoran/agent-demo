@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nova · LangGraph 单 Agent 工作台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ===================== 左侧：状态 / 工具 / 知识库 ===================== -->
+      <aside class="sidebar">
+        <header class="brand">
+          <div class="brand-mark">N</div>
+          <div class="brand-text">
+            <h1>Nova Agent</h1>
+            <p>LangChain · LangGraph 单 Agent</p>
+          </div>
+        </header>
+
+        <section class="status-grid" id="statusGrid">
+          <div class="status-card"><span class="status-label">模型</span><strong id="stModel">—</strong></div>
+          <div class="status-card"><span class="status-label">MCP</span><strong id="stMcp">—</strong></div>
+          <div class="status-card"><span class="status-label">知识库</span><strong id="stRag">—</strong></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>工具</h2>
+            <span class="badge" id="toolCount">0</span>
+          </div>
+          <div class="tool-groups" id="toolGroups"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>知识库</h2>
+            <span class="badge" id="ragCount">0</span>
+          </div>
+
+          <label class="dropzone" id="dropzone">
+            <input
+              type="file"
+              id="fileInput"
+              accept=".txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.log,.py,.ts,.js,.html,.htm,.xml,.yml,.yaml,.sql"
+              hidden
+            />
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke-linecap="round" />
+            </svg>
+            <strong>上传文档</strong>
+            <span>txt / md / csv / json / 代码</span>
+          </label>
+
+          <ul class="doc-list" id="docList"></ul>
+        </section>
+
+        <footer class="sidebar-foot">
+          <span class="dot live"></span>
+          <span>本地运行 · 记忆保存在内存</span>
+        </footer>
+      </aside>
+
+      <!-- ===================== 右侧：对话 ===================== -->
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2 id="threadTitle">新会话</h2>
+            <p id="threadMeta">threadId 绑定 MemorySaver 的对话记忆</p>
+          </div>
+          <div class="topbar-actions">
+            <span class="pill" id="mcpPill">MCP 连接中…</span>
+            <button class="btn ghost" id="newChat">清空会话</button>
+          </div>
+        </header>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="composer">
+          <div class="composer-box">
+            <textarea id="input" rows="1" placeholder="问点什么…（Enter 发送 / Shift + Enter 换行）"></textarea>
+            <button class="send" id="send" title="发送">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h13M12 5.5 18.5 12 12 18.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div class="composer-hint">
+            <span id="composerHint">Agent 会自己决定：算数 / 查知识库 / 加载技能 / 调 MCP 工具</span>
+            <span id="charCount">0</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

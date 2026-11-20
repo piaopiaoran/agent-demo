@@ -1,0 +1,18 @@
+node_modules/
+dist/
+.env
+.DS_Store
+# npx / npm 的项目本地缓存（避开系统 ~/.npm 的权限问题）
+.npm-cache/
+
+# 本地调试与工具痕迹
+.probe/
+.workbuddy/
+
+# 运行期数据（知识库索引 / 笔记 / 上传文件）
+data/index/*
+data/notes/*
+data/rag/uploads/*
+!data/index/.gitkeep
+!data/notes/.gitkeep
+!data/rag/uploads/.gitkeep
