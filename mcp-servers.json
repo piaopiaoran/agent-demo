@@ -7,7 +7,7 @@
       "command": "node",
       "args": [
         "node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
-        "./data"
+        "${cwd}/data"
       ],
       "enabled": true
     },
@@ -33,7 +33,7 @@
       "env": {
         "MCP_TRANSPORT_TYPE": "stdio",
         "MCP_LOG_LEVEL": "error",
-        "GIT_BASE_DIR": ".",
+        "GIT_BASE_DIR": "${cwd}",
         "GIT_SIGN_COMMITS": "false"
       },
       "enabled": true

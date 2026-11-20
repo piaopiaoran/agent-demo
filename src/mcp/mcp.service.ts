@@ -30,6 +30,11 @@ function safeName(name: string): string {
   return (name || 'tool').replace(/[^a-zA-Z0-9_-]+/g, '_').replace(/^_+|_+$/g, '') || 'tool';
 }
 
+/** 把配置里的 ${cwd} 占位符替换成项目根目录，避免仓库里出现本机绝对路径 */
+function expandCwd(value: string): string {
+  return value.split('${cwd}').join(process.cwd());
+}
+
 /**
  * MCP 接入层（Model Context Protocol）。
  *
@@ -124,8 +129,12 @@ export class McpService implements OnModuleInit {
           ? {
               transport: 'stdio' as const,
               command: conf.command as string,
-              args: conf.args ?? [],
-              env: conf.env,
+              args: (conf.args ?? []).map(expandCwd),
+              env: conf.env
+                ? Object.fromEntries(
+                    Object.entries(conf.env).map(([key, value]) => [key, expandCwd(value)]),
+                  )
+                : undefined,
             }
           : {
               // @langchain/mcp-adapters 0.6 起，远程 transport 的字面量由
